@@ -11,7 +11,7 @@ All pushes to the master branch are automatically deployed to Heroku.
 ## Promoting a Release
 
 ```
-heroku config:set UMMOJI_STABLE_VERSION=1.1.0
+heroku config:set HOSPITALRUN_STABLE_VERSION=0.9.18
 ```
 
 ## Example Query

@@ -1,39 +1,41 @@
-require('dotenv-safe').load()
+require('dotenv-safe').load();
 
-const express = require('express')
-const app = express()
-const url = 'https://ummoji-update-server.herokuapp.com'
-const port = Number(process.env.PORT) || 5000
-const assetDownloadUrl = 'https://github.com/ummoji/ummoji-desktop/releases/download'
-const homepageUrl = 'https://github.com/ummoji/ummoji-update-server'
+const express = require('express');
+const url = 'https://releases.hospitalrun.io';
+const port = Number(process.env.PORT) || 5006;
+// https://releases.hospitalrun.io/downloads/releases/latest/macos/HospitalRun.zip
+const assetDownloadUrl = '/downloads/releases';
+const homepageUrl = 'http://hospitalrun.io';
 
-app.set('port', port)
+const app = express();
+app.set('port', port);
 
 app.listen(app.get('port'), () => {
-  console.log('Server is running on port', app.get('port'))
-})
+  console.log('Server is running on port', app.get('port'));
+});
 
 app.get('/', (request, response) => {
-  response.redirect(homepageUrl)
-})
+  response.redirect(homepageUrl);
+});
 
 app.get('/updates/:asset', (request, response) => {
-  const asset = request.params.asset
-  const version = process.env.UMMOJI_STABLE_VERSION
-  response.redirect(`${assetDownloadUrl}/v${version}/${asset}`)
-})
+  const asset = request.params.asset;
+  const version = process.env.HOSPITALRUN_STABLE_VERSION;
+  response.redirect(`${assetDownloadUrl}/v${version}/${asset}`);
+});
 
 app.get('/updates', (request, response) => {
-  const version = request.query.version
-  const latestRelease = process.env.UMMOJI_STABLE_VERSION
+  const version = request.query.version;
+  const latestRelease = process.env.HOSPITALRUN_STABLE_VERSION;
   if (version === latestRelease) {
-    response.status(204).end()
+    response.status(204).end();
   } else {
     response.json({
-      name: `Ummoji v${latestRelease}`,
-      notes: 'The latest release of the app',
+      name: `HospitalRun v${latestRelease}`,
+      notes: 'The latest release of HospitalRun.',
       pub_date: new Date().toISOString(),
-      url: `${url}/updates/Ummoji-${latestRelease}.dmg`
-    })
+      url: ''
+      // url: `${url}:${port}/updates/HospitalRun-${latestRelease}.dmg`
+    });
   }
-})
+});
