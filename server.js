@@ -44,7 +44,7 @@ app.get('/updates', (request, response) => {
     if (!platform) {
       platform = 'macos';
     }
-    let fullurl = `/updates/`;
+    let fullurl = `${url}/updates/`;
     switch (platform) {
       case 'macos':
         fullurl += 'macos/HospitalRun.dmg';
