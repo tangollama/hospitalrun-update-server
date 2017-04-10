@@ -20,22 +20,47 @@ app.get('/', (request, response) => {
 
 app.get('/updates/:asset', (request, response) => {
   const asset = request.params.asset;
+  const platform = 'macos';
   const version = process.env.HOSPITALRUN_STABLE_VERSION;
-  response.redirect(`${assetDownloadUrl}/v${version}/${asset}`);
+  // console.log(`${url}${assetDownloadUrl}/${version}/${platform}/${asset}`);
+  response.redirect(`${url}${assetDownloadUrl}/${version}/${platform}/${asset}`);
+});
+
+app.get('/updates/:platform/:asset', (request, response) => {
+  const asset = request.params.asset;
+  const platform = request.params.platform;
+  const version = process.env.HOSPITALRUN_STABLE_VERSION;
+  // console.log(`${url}${assetDownloadUrl}/${version}/${platform}/${asset}`);
+  response.redirect(`${url}${assetDownloadUrl}/${version}/${platform}/${asset}`);
 });
 
 app.get('/updates', (request, response) => {
-  const version = request.query.version;
   const latestRelease = process.env.HOSPITALRUN_STABLE_VERSION;
+  const version = request.query.version;
   if (version === latestRelease) {
     response.status(204).end();
   } else {
+    let platform = request.query.platform;
+    if (!platform) {
+      platform = 'macos';
+    }
+    let fullurl = `${url}:${port}/updates/`;
+    switch (platform) {
+      case 'macos':
+        fullurl += 'macos/HospitalRun.dmg';
+        break;
+      case 'win32':
+        fullurl += 'win32/HospitalRun.exe';
+        break;
+      case 'win32x64':
+        fullurl += 'win32x64/HospitalRun.exe';
+        break;
+    }
     response.json({
       name: `HospitalRun v${latestRelease}`,
       notes: 'The latest release of HospitalRun.',
       pub_date: new Date().toISOString(),
-      url: ''
-      // url: `${url}:${port}/updates/HospitalRun-${latestRelease}.dmg`
+      url: fullurl
     });
   }
 });
